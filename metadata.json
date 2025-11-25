@@ -1,8 +1,8 @@
 {
-    "uuid": "drive-space@diskmonitor",
-    "name": "Drive Space Monitor",
+    "uuid": "simple-drive-space@djpbe28",
+    "name": "Simple Drive Space Monitor",
     "description": "Simple applet that displays available space on a selected folder or mounted drive.",
-    "icon": "drive-harddisk",
+    "icon": "logo.png",
     "version": "1.0.0",
     "author": "JP",
     "max-instances": -1,

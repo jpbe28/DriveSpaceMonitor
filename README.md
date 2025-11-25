@@ -18,7 +18,18 @@ A Cinnamon panel applet that displays the available space on a selected folder o
 
 ## Installation
 
-### Method 1: Using the Installation Script (Recommended)
+### Method 1: Install from Cinnamon Spices (Easiest)
+
+Install it directly from the Cinnamon applet menu:
+
+1. Right-click on your Cinnamon panel
+2. Select "Add applets to the panel"
+3. Click on "Download" tab (or "Get more online")
+4. Search for "Drive Space Monitor"
+5. Click "Install" next to the applet
+6. The applet will be automatically installed and ready to use
+
+### Method 2: Using the Installation Script
 
 1. Run the installation script:
    ```bash
@@ -27,7 +38,7 @@ A Cinnamon panel applet that displays the available space on a selected folder o
    ./install.sh
    ```
 
-### Method 2: Manual Installation
+### Method 3: Manual Installation
 
 1. Copy the applet directory to your Cinnamon applets folder:
    ```bash
@@ -42,6 +53,8 @@ A Cinnamon panel applet that displays the available space on a selected folder o
    - Right-click on the panel
    - Select "Add applets to the panel"
    - Find "Drive Space Monitor" and click "Add"
+
+**Note:** For Methods 2 and 3, you'll need to download the applet files manually (from GitHub releases or by cloning the repository).
 
 ## Configuration
 
