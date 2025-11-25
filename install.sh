@@ -18,7 +18,7 @@ cp "$SOURCE_DIR/metadata.json" "$TARGET_DIR/"
 cp "$SOURCE_DIR/applet.js" "$TARGET_DIR/"
 cp "$SOURCE_DIR/stylesheet.css" "$TARGET_DIR/"
 cp "$SOURCE_DIR/settings-schema.json" "$TARGET_DIR/"
-cp "$SOURCE_DIR/logo.png" "$TARGET_DIR/" 2>/dev/null || true
+cp "$SOURCE_DIR/icon.png" "$TARGET_DIR/" 2>/dev/null || true
 
 echo "Applet installed successfully!"
 echo ""
