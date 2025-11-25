@@ -6,9 +6,8 @@ A Cinnamon panel applet that displays the available space on a selected folder o
 
 ## Features
 
-- Shows available disk space in human-readable format (e.g., "50G free")
-- Displays usage percentage (configurable: used or free)
-- Updates automatically at configurable intervals (default: 60 seconds)
+- Shows available disk space on a panel
+- Displays usage percentage
 - Click to open the folder/drive in file manager (configurable)
 - Detailed tooltip showing total, used, and available space
 - Custom label support to override drive name
@@ -68,8 +67,7 @@ The applet includes a built-in settings UI. To configure it:
 
 - **Mount point or folder to monitor**: Select the mounted drive or folder you want to monitor (e.g., `/mnt/Media4`, `/home`, `/`)
 - **Update interval**: How often to update the disk space information (default: 60 seconds, range: 5-3600)
-- **Show percentage**: Display the percentage next to the available space (default: enabled)
-- **Percentage type**: Choose whether to show used or free percentage (default: used)
+- **Show percentage**: Display the percentage next to the available space (default: enabled, shows used %)
 - **Show drive name**: Display the drive name before the free space (default: enabled)
 - **Custom label**: Set a custom label that overrides the drive name. Leave empty to use drive name if enabled above
 - **Show 'free' text**: Display the word "free" after the available space (default: enabled)

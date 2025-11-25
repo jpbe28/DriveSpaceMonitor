@@ -2,7 +2,7 @@
 
 # Installation script for Drive Space Monitor Applet
 
-APPLET_NAME="simple-drive-space@djpbe28"
+APPLET_NAME="simple-drive-space@jpbe28"
 SOURCE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 TARGET_DIR="$HOME/.local/share/cinnamon/applets/$APPLET_NAME"
 

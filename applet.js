@@ -27,7 +27,6 @@ DriveSpaceApplet.prototype = {
         this.drivePath = "/";
         this.updateInterval = 60;
         this.showPercentage = true;
-        this.percentageType = "used";
         this.showDriveName = true;
         this.showFreeText = true;
         this.customLabel = "";
@@ -45,9 +44,6 @@ DriveSpaceApplet.prototype = {
             self._onSettingsChanged();
         });
         this.settings.bind("show-percentage", "showPercentage", function() {
-            self._onSettingsChanged();
-        });
-        this.settings.bind("percentage-type", "percentageType", function() {
             self._onSettingsChanged();
         });
         this.settings.bind("show-drive-name", "showDriveName", function() {
@@ -232,16 +228,8 @@ DriveSpaceApplet.prototype = {
         }
         
         // Add percentage if enabled and available
-        if (this.showPercentage && space.percent > 0) {
-            let percentValue;
-            if (this.percentageType === "free") {
-                // Show free percentage
-                percentValue = 100 - space.percent;
-            } else {
-                // Show used percentage (default)
-                percentValue = space.percent;
-            }
-            label += " (" + percentValue + "%)";
+        if (this.showPercentage && !isNaN(space.percent) && space.percent >= 0) {
+            label += " (" + space.percent + "%)";
         }
         
         this.set_applet_label(label);

@@ -22,16 +22,6 @@
         "description": "Show percentage",
         "tooltip": "Display the percentage next to the available space"
     },
-    "percentage-type": {
-        "type": "combobox",
-        "default": "used",
-        "description": "Percentage type",
-        "tooltip": "Choose whether to show used or free percentage",
-        "options": {
-            "used": "Used",
-            "free": "Free"
-        }
-    },
     "show-drive-name": {
         "type": "checkbox",
         "default": true,
