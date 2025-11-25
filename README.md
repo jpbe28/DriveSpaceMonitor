@@ -2,6 +2,8 @@
 
 A Cinnamon panel applet that displays the available space on a selected folder or mounted drive.
 
+![Drive Space Monitor Applet](demo.png)
+
 ## Features
 
 - Shows available disk space in human-readable format (e.g., "50G free")
