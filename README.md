@@ -1,8 +1,8 @@
-# Drive Space Monitor Applet
+# Simple Storage Monitor Applet
 
 A Cinnamon panel applet that displays the available space on a selected folder or mounted drive.
 
-![Drive Space Monitor Applet](demo.png)
+![Simple Storage Monitor Applet](screenshot.png)
 
 ## Features
 
@@ -24,7 +24,7 @@ Install it directly from the Cinnamon applet menu:
 1. Right-click on your Cinnamon panel
 2. Select "Add applets to the panel"
 3. Click on "Download" tab (or "Get more online")
-4. Search for "Drive Space Monitor"
+4. Search for "Simple Storage Monitor"
 5. Click "Install" next to the applet
 6. The applet will be automatically installed and ready to use
 
@@ -32,7 +32,7 @@ Install it directly from the Cinnamon applet menu:
 
 1. Run the installation script:
    ```bash
-   cd /path/to/DriveSpaceMonitor
+   cd /path/to/SimpleStorageMonitor
    chmod +x install.sh
    ./install.sh
    ```
@@ -41,7 +41,7 @@ Install it directly from the Cinnamon applet menu:
 
 1. Copy the applet directory to your Cinnamon applets folder:
    ```bash
-   cp -r /path/to/DriveSpaceMonitor ~/.local/share/cinnamon/applets/drive-space@diskmonitor
+   cp -r /path/to/SimpleStorageMonitor ~/.local/share/cinnamon/applets/simple-storage-monitor@jpbe28
    ```
 
 2. Reload Cinnamon:
@@ -51,7 +51,7 @@ Install it directly from the Cinnamon applet menu:
 3. Add the applet to your panel:
    - Right-click on the panel
    - Select "Add applets to the panel"
-   - Find "Drive Space Monitor" and click "Add"
+   - Find "Simple Storage Monitor" and click "Add"
 
 **Note:** For Methods 2 and 3, you'll need to download the applet files manually (from GitHub releases or by cloning the repository).
 

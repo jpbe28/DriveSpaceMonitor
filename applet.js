@@ -68,7 +68,7 @@ DriveSpaceApplet.prototype = {
             // No need to update on this change
         });
         
-        this.set_applet_tooltip("Drive Space Monitor");
+        this.set_applet_tooltip("Simple Storage Monitor");
         this.set_applet_label("Loading...");
         
         // Create context menu
