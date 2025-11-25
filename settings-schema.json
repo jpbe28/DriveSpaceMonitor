@@ -1,0 +1,83 @@
+{
+    "drive-path": {
+        "type": "filechooser",
+        "default": "/",
+        "description": "Mount point or folder to monitor",
+        "tooltip": "Select the mounted drive or folder you want to monitor",
+        "select-dir": true
+    },
+    "update-interval": {
+        "type": "spinbutton",
+        "default": 60,
+        "min": 5,
+        "max": 3600,
+        "step": 5,
+        "units": "seconds",
+        "description": "Update interval",
+        "tooltip": "How often to update the disk space information (in seconds)"
+    },
+    "show-percentage": {
+        "type": "checkbox",
+        "default": true,
+        "description": "Show percentage",
+        "tooltip": "Display the percentage next to the available space"
+    },
+    "percentage-type": {
+        "type": "combobox",
+        "default": "used",
+        "description": "Percentage type",
+        "tooltip": "Choose whether to show used or free percentage",
+        "options": {
+            "used": "Used",
+            "free": "Free"
+        }
+    },
+    "show-drive-name": {
+        "type": "checkbox",
+        "default": true,
+        "description": "Show drive name",
+        "tooltip": "Display the drive name before the free space"
+    },
+    "custom-label": {
+        "type": "entry",
+        "default": "",
+        "description": "Custom label (overrides drive name)",
+        "tooltip": "Set a custom label that overrides the drive name. Leave empty to use drive name if enabled above.",
+        "placeholder": "Enter custom label..."
+    },
+    "show-free-text": {
+        "type": "checkbox",
+        "default": true,
+        "description": "Show 'free' text",
+        "tooltip": "Display the word 'free' after the available space"
+    },
+    "low-space-warning-enabled": {
+        "type": "checkbox",
+        "default": true,
+        "description": "Enable low space warning",
+        "tooltip": "Change text color when available space is below threshold"
+    },
+    "low-space-threshold": {
+        "type": "spinbutton",
+        "default": 10,
+        "min": 1,
+        "max": 50,
+        "step": 1,
+        "units": "%",
+        "description": "Low space threshold",
+        "tooltip": "Warning color will be applied when available space is below this percentage"
+    },
+    "low-space-color": {
+        "type": "colorchooser",
+        "default": "#ff0000",
+        "description": "Low space warning color",
+        "tooltip": "Color to display when available space is below threshold"
+    },
+    "open-file-manager-on-click": {
+        "type": "checkbox",
+        "default": true,
+        "description": "Open file manager on click",
+        "tooltip": "When enabled, clicking the applet opens the file manager to the monitored folder. When disabled, clicking opens settings."
+    }
+}
+

@@ -1,0 +1,13 @@
+.drive-space-applet {
+    padding: 0 8px;
+}
+
+.drive-space-applet-label {
+    font-size: 11px;
+    color: #ffffff;
+}
+
+.drive-space-applet-label:hover {
+    color: #99ccff;
+}
+

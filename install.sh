@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# Installation script for Drive Space Monitor Applet
+
+APPLET_NAME="drive-space@diskmonitor"
+SOURCE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+TARGET_DIR="$HOME/.local/share/cinnamon/applets/$APPLET_NAME"
+
+echo "Installing Drive Space Monitor Applet..."
+echo "Source: $SOURCE_DIR"
+echo "Target: $TARGET_DIR"
+
+# Create target directory
+mkdir -p "$TARGET_DIR"
+
+# Copy applet files
+cp "$SOURCE_DIR/metadata.json" "$TARGET_DIR/"
+cp "$SOURCE_DIR/applet.js" "$TARGET_DIR/"
+cp "$SOURCE_DIR/stylesheet.css" "$TARGET_DIR/"
+cp "$SOURCE_DIR/settings-schema.json" "$TARGET_DIR/"
+
+echo "Applet installed successfully!"
+echo ""
+echo "To use the applet:"
+echo "1. Reload Cinnamon (Alt+F2, type 'r', press Enter)"
+echo "2. Right-click on the panel and select 'Add applets to the panel'"
+echo "3. Find 'Drive Space Monitor' and click 'Add'"
+echo ""
+echo "To configure the drive path:"
+echo "  Right-click on the applet and select 'Configure...'"
+echo "  Enter the drive path (e.g., /mnt/Media4, /mnt/driverName)"
+
