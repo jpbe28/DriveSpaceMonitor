@@ -82,7 +82,13 @@ This applet is written in JavaScript using the Cinnamon applet API. The main fil
 
 ## Requirements
 
-- Linux Mint with Cinnamon desktop environment (or any Linux distribution with Cinnamon)
+- Any Linux distribution with Cinnamon desktop environment installed
+  - Linux Mint (most common)
+  - Fedora with Cinnamon
+  - Arch Linux with Cinnamon
+  - Debian/Ubuntu with Cinnamon
+  - openSUSE with Cinnamon
+  - Any other distribution with Cinnamon
 - Cinnamon version 3.0 or higher (tested up to 6.0)
 
 ## License
