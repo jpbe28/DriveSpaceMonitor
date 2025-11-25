@@ -1,7 +1,7 @@
 {
     "uuid": "drive-space@diskmonitor",
     "name": "Drive Space Monitor",
-    "description": "Displays available space on a selected folder or mounted drive",
+    "description": "Simple applet that displays available space on a selected folder or mounted drive.",
     "icon": "drive-harddisk",
     "version": "1.0.0",
     "author": "JP",
