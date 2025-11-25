@@ -249,7 +249,7 @@ DriveSpaceApplet.prototype = {
         if (displayPath.startsWith("file://")) {
             displayPath = GLib.filename_from_uri(displayPath, null)[0];
         }
-        let tooltip = "Path: " + displayPath + "\n";
+        let tooltip = displayPath + "\n";
         tooltip += "Total: " + space.total + "\n";
         tooltip += "Used: " + space.used + "\n";
         tooltip += "Available: " + space.available;
