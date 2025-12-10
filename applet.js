@@ -16,14 +16,12 @@ DriveSpaceApplet.prototype = {
 
     _init: function(metadata, orientation, panel_height, instance_id) {
         Applet.TextApplet.prototype._init.call(this, orientation, panel_height, instance_id);
-        
+
         this.metadata = metadata;
         this.instance_id = instance_id;
-        
-        // Initialize settings
-        this.settings = new Settings.AppletSettings(this, metadata.uuid, instance_id);
-        
-        // Initialize properties with defaults (will be overridden by bind if saved values exist)
+        this._updateLoop = 0;
+
+        // Default settings
         this.drivePath = "/";
         this.updateInterval = 60;
         this.showPercentage = true;
@@ -34,278 +32,169 @@ DriveSpaceApplet.prototype = {
         this.lowSpaceThreshold = 10;
         this.lowSpaceColor = "#ff0000";
         this.openFileManagerOnClick = true;
-        
-        // Bind settings with callbacks - this will load saved values and override defaults
-        let self = this;
-        this.settings.bind("drive-path", "drivePath", function() {
-            self._onSettingsChanged();
-        });
-        this.settings.bind("update-interval", "updateInterval", function() {
-            self._onSettingsChanged();
-        });
-        this.settings.bind("show-percentage", "showPercentage", function() {
-            self._onSettingsChanged();
-        });
-        this.settings.bind("show-drive-name", "showDriveName", function() {
-            self._onSettingsChanged();
-        });
-        this.settings.bind("show-free-text", "showFreeText", function() {
-            self._onSettingsChanged();
-        });
-        this.settings.bind("custom-label", "customLabel", function() {
-            self._onSettingsChanged();
-        });
-        this.settings.bind("low-space-warning-enabled", "lowSpaceWarningEnabled", function() {
-            self._onSettingsChanged();
-        });
-        this.settings.bind("low-space-threshold", "lowSpaceThreshold", function() {
-            self._onSettingsChanged();
-        });
-        this.settings.bind("low-space-color", "lowSpaceColor", function() {
-            self._onSettingsChanged();
-        });
-        this.settings.bind("open-file-manager-on-click", "openFileManagerOnClick", function() {
-            // No need to update on this change
-        });
-        
+
+        // Load settings
+        this.settings = new Settings.AppletSettings(this, metadata.uuid, instance_id);
+
+        // Correct explicit bindings
+        this.settings.bind("drive-path", "drivePath", () => this._onSettingsChanged());
+        this.settings.bind("update-interval", "updateInterval", () => this._onSettingsChanged());
+        this.settings.bind("show-percentage", "showPercentage", () => this._onSettingsChanged());
+        this.settings.bind("show-drive-name", "showDriveName", () => this._onSettingsChanged());
+        this.settings.bind("show-free-text", "showFreeText", () => this._onSettingsChanged());
+        this.settings.bind("custom-label", "customLabel", () => this._onSettingsChanged());
+        this.settings.bind("low-space-warning-enabled", "lowSpaceWarningEnabled", () => this._onSettingsChanged());
+        this.settings.bind("low-space-threshold", "lowSpaceThreshold", () => this._onSettingsChanged());
+        this.settings.bind("low-space-color", "lowSpaceColor", () => this._onSettingsChanged());
+        this.settings.bind("open-file-manager-on-click", "openFileManagerOnClick", () => {});
+
         this.set_applet_tooltip("Simple Storage Monitor");
         this.set_applet_label("Loading...");
-        
-        // Create context menu
+
+        // Context menu
         this.menuManager = new PopupMenu.PopupMenuManager(this);
         this.menu = new Applet.AppletPopupMenu(this, orientation);
         this.menuManager.addMenu(this.menu);
-        
-        // Add menu items
         this._createContextMenu();
-        
-        // Start monitoring
-        this._update();
+
+        // Start update loop
+        this._startUpdateLoop();
     },
 
     _createContextMenu: function() {
-        // Configure menu item - opens settings dialog with file chooser
         let configureItem = new PopupMenu.PopupMenuItem("Configure...");
-        let self = this;
-        configureItem.connect('activate', function() {
-            self.settings.openSettings();
-        });
+        configureItem.connect('activate', () => this.settings.openSettings());
         this.menu.addMenuItem(configureItem);
-        
-        // Select Folder menu item - also opens settings
+
         let selectFolderItem = new PopupMenu.PopupMenuItem("Select Folder...");
-        selectFolderItem.connect('activate', function() {
-            self.settings.openSettings();
-        });
+        selectFolderItem.connect('activate', () => this.settings.openSettings());
         this.menu.addMenuItem(selectFolderItem);
     },
 
     _onSettingsChanged: function() {
-        // Handle file chooser URI if needed
         if (this.drivePath && this.drivePath.startsWith("file://")) {
             this.drivePath = GLib.filename_from_uri(this.drivePath, null)[0];
         }
-        // Restart update cycle when settings change
+
+        this._startUpdateLoop();
+    },
+
+    _stopUpdateLoop: function() {
+        if (this._updateLoop > 0) {
+            Mainloop.source_remove(this._updateLoop);
+            this._updateLoop = 0;
+        }
+    },
+
+    _startUpdateLoop: function() {
+        this._stopUpdateLoop();
         this._update();
+        this._updateLoop = Mainloop.timeout_add_seconds(this.updateInterval, () => {
+            this._update();
+            return true; // repeat
+        });
     },
 
     _getDriveSpace: function() {
         try {
-            // Ensure we have a valid path
             let path = this.drivePath || "/";
             if (path.startsWith("file://")) {
                 path = GLib.filename_from_uri(path, null)[0];
             }
-            
-            // Use df command to get disk space for the path
-            // df will show the filesystem info for whatever filesystem contains this path
+
             let [ok, out, err, exit] = GLib.spawn_command_line_sync(
                 "df -h " + GLib.shell_quote(path)
             );
-            
-            if (!ok || exit !== 0) {
-                return { available: "Error", used: "", total: "", percent: 0 };
-            }
-            
+
+            if (!ok || exit !== 0) return { available: "Error", used: "", total: "", percent: 0 };
+
             let output = imports.byteArray.toString(out);
             let lines = output.split("\n");
-            
-            if (lines.length < 2) {
-                return { available: "N/A", used: "", total: "", percent: 0 };
-            }
-            
-            // Parse df output
-            // Format: Filesystem Size Used Avail Use% Mounted on
+            if (lines.length < 2) return { available: "N/A", used: "", total: "", percent: 0 };
+
             let parts = lines[1].trim().split(/\s+/);
-            
-            if (parts.length < 5) {
-                return { available: "N/A", used: "", total: "", percent: 0 };
-            }
-            
-            let total = parts[1];
-            let used = parts[2];
-            let available = parts[3];
-            let percent = parseInt(parts[4].replace("%", ""));
-            
+            if (parts.length < 5) return { available: "N/A", used: "", total: "", percent: 0 };
+
             return {
-                available: available,
-                used: used,
-                total: total,
-                percent: percent
+                total: parts[1],
+                used: parts[2],
+                available: parts[3],
+                percent: parseInt(parts[4].replace("%", ""))
             };
         } catch (e) {
             return { available: "Error", used: "", total: "", percent: 0 };
         }
     },
 
-    _formatBytes: function(bytes) {
-        const units = ['B', 'KB', 'MB', 'GB', 'TB'];
-        let size = bytes;
-        let unitIndex = 0;
-        
-        while (size >= 1024 && unitIndex < units.length - 1) {
-            size /= 1024;
-            unitIndex++;
-        }
-        
-        return size.toFixed(1) + " " + units[unitIndex];
-    },
-
     _getDriveName: function() {
-        // Extract drive name from path
         let path = this.drivePath || "/";
-        if (path.startsWith("file://")) {
-            path = GLib.filename_from_uri(path, null)[0];
-        }
-        
-        // Remove trailing slash
+        if (path.startsWith("file://")) path = GLib.filename_from_uri(path, null)[0];
+
         path = path.replace(/\/$/, "");
-        
-        // Get the last component of the path
-        if (path === "/") {
-            return "Root";
-        }
-        
+        if (path === "/") return "Root";
+
         let parts = path.split("/");
-        let name = parts[parts.length - 1];
-        
-        // If empty, try the second-to-last part
-        if (!name || name === "") {
-            name = parts[parts.length - 2] || "Root";
-        }
-        
-        return name;
+        return parts.pop() || parts.pop() || "Root";
     },
 
     _update: function() {
         let space = this._getDriveSpace();
-        
+
         // Build label
-        let label = "";
-        
-        // Determine what label to show
-        // Custom label always overrides drive name if set
-        let displayLabel = "";
-        if (this.customLabel && this.customLabel.trim() !== "") {
-            // Use custom label if provided (overrides drive name)
-            displayLabel = this.customLabel.trim();
-        } else if (this.showDriveName) {
-            // Use drive name only if custom label is empty and drive name is enabled
-            displayLabel = this._getDriveName();
-        }
-        
-        // Add label with colon if we have a label
-        if (displayLabel !== "") {
-            label += displayLabel + ": ";
-        }
-        
-        // Add available space
+        let name = this.customLabel.trim() !== "" ?
+            this.customLabel.trim() :
+            (this.showDriveName ? this._getDriveName() : "");
+
+        let label = name ? name + ": " : "";
         label += space.available;
-        
-        // Add "free" text if enabled
-        if (this.showFreeText) {
-            label += " free";
-        }
-        
-        // Add percentage if enabled and available
-        if (this.showPercentage && !isNaN(space.percent) && space.percent >= 0) {
-            label += " (" + space.percent + "%)";
-        }
-        
+
+        if (this.showFreeText) label += " free";
+        if (this.showPercentage && !isNaN(space.percent)) label += " (" + space.percent + "%)";
+
         this.set_applet_label(label);
-        
-        // Apply low space warning color if enabled
-        let availablePercent = 100 - space.percent;
-        if (this.lowSpaceWarningEnabled && availablePercent < this.lowSpaceThreshold) {
-            // Apply warning color
-            this.actor.style = "color: " + this.lowSpaceColor + ";";
+
+        // Low space color
+        let freePercent = 100 - space.percent;
+        if (this.lowSpaceWarningEnabled && freePercent < this.lowSpaceThreshold) {
+            this.actor.style = `color: ${this.lowSpaceColor};`;
         } else {
-            // Reset to default color
             this.actor.style = "";
         }
-        
-        // Update tooltip with more details
-        let displayPath = this.drivePath || "/";
-        if (displayPath.startsWith("file://")) {
+
+        // Tooltip
+        let displayPath = this.drivePath;
+        if (displayPath.startsWith("file://"))
             displayPath = GLib.filename_from_uri(displayPath, null)[0];
-        }
-        let tooltip = displayPath + "\n";
-        tooltip += "Total: " + space.total + "\n";
-        tooltip += "Used: " + space.used + "\n";
-        tooltip += "Available: " + space.available;
-        
-        this.set_applet_tooltip(tooltip);
-        
-        // Schedule next update
-        let self = this;
-        Mainloop.timeout_add_seconds(this.updateInterval, function() {
-            self._update();
-            return false; // Don't repeat automatically
-        });
+
+        this.set_applet_tooltip(
+            `${displayPath}\nTotal: ${space.total}\nUsed: ${space.used}\nAvailable: ${space.available}`
+        );
     },
 
-    on_applet_clicked: function(event) {
-        // Left click behavior depends on setting
+    on_applet_clicked: function() {
         if (this.openFileManagerOnClick) {
-            // Open file manager to the path
-            let path = this.drivePath || "/";
-            if (path.startsWith("file://")) {
-                path = GLib.filename_from_uri(path, null)[0];
-            }
+            let path = this.drivePath;
+            if (path.startsWith("file://")) path = GLib.filename_from_uri(path, null)[0];
             Util.spawnCommandLine("xdg-open " + GLib.shell_quote(path));
-        } else {
-            // Open settings dialog
-            if (this.settings) {
-                this.settings.openSettings();
-            }
         }
     },
 
-    on_applet_middle_clicked: function(event) {
-        // Middle click opens file manager to the path
-        let path = this.drivePath || "/";
-        if (path.startsWith("file://")) {
-            path = GLib.filename_from_uri(path, null)[0];
-        }
+    on_applet_middle_clicked: function() {
+        let path = this.drivePath;
+        if (path.startsWith("file://")) path = GLib.filename_from_uri(path, null)[0];
         Util.spawnCommandLine("xdg-open " + GLib.shell_quote(path));
     },
 
-    on_applet_context_menu: function(event) {
-        // Show context menu on right-click
-        if (this.menu) {
-            this.menu.toggle();
-        }
+    on_applet_context_menu: function() {
+        if (this.menu) this.menu.toggle();
     },
 
     on_applet_removed_from_panel: function() {
-        // Clean up settings when applet is removed
-        if (this.settings) {
-            this.settings.finalize();
-        }
+        this._stopUpdateLoop();
+        if (this.settings) this.settings.finalize();
     }
 };
 
 function main(metadata, orientation, panel_height, instance_id) {
     return new DriveSpaceApplet(metadata, orientation, panel_height, instance_id);
 }
-

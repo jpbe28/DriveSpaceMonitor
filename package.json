@@ -1,6 +1,6 @@
 {
   "name": "simple-storage-monitor",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Cinnamon panel applet to display available space on a mounted drive",
   "main": "applet.js",
   "scripts": {
