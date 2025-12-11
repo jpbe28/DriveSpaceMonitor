@@ -26,17 +26,16 @@ DriveSpaceApplet.prototype = {
         this.updateInterval = 60;
         this.showPercentage = true;
         this.showDriveName = true;
-        this.showFreeText = true;
+        this.showFreeText = false;
         this.customLabel = "";
         this.lowSpaceWarningEnabled = true;
         this.lowSpaceThreshold = 10;
-        this.lowSpaceColor = "#ff0000";
+        this.lowSpaceColor = "#ff0000ff";
         this.openFileManagerOnClick = true;
 
         // Load settings
         this.settings = new Settings.AppletSettings(this, metadata.uuid, instance_id);
 
-        // Correct explicit bindings
         this.settings.bind("drive-path", "drivePath", () => this._onSettingsChanged());
         this.settings.bind("update-interval", "updateInterval", () => this._onSettingsChanged());
         this.settings.bind("show-percentage", "showPercentage", () => this._onSettingsChanged());
@@ -56,19 +55,7 @@ DriveSpaceApplet.prototype = {
         this.menu = new Applet.AppletPopupMenu(this, orientation);
         this.menuManager.addMenu(this.menu);
         this._createContextMenu();
-
-        // Start update loop
         this._startUpdateLoop();
-    },
-
-    _createContextMenu: function() {
-        let configureItem = new PopupMenu.PopupMenuItem("Configure...");
-        configureItem.connect('activate', () => this.settings.openSettings());
-        this.menu.addMenuItem(configureItem);
-
-        let selectFolderItem = new PopupMenu.PopupMenuItem("Select Folder...");
-        selectFolderItem.connect('activate', () => this.settings.openSettings());
-        this.menu.addMenuItem(selectFolderItem);
     },
 
     _onSettingsChanged: function() {
@@ -93,6 +80,16 @@ DriveSpaceApplet.prototype = {
             this._update();
             return true; // repeat
         });
+    },
+
+    _createContextMenu: function() {
+        let configureItem = new PopupMenu.PopupMenuItem("Configure...");
+        configureItem.connect('activate', () => this.settings.openSettings());
+        this.menu.addMenuItem(configureItem);
+
+        let selectFolderItem = new PopupMenu.PopupMenuItem("Select Folder...");
+        selectFolderItem.connect('activate', () => this.settings.openSettings());
+        this.menu.addMenuItem(selectFolderItem);
     },
 
     _getDriveSpace: function() {
@@ -138,9 +135,9 @@ DriveSpaceApplet.prototype = {
     },
 
     _update: function() {
+        
         let space = this._getDriveSpace();
 
-        // Build label
         let name = this.customLabel.trim() !== "" ?
             this.customLabel.trim() :
             (this.showDriveName ? this._getDriveName() : "");

@@ -10,11 +10,17 @@
   "keywords": [
     "cinnamon",
     "applet",
+    "spice",
+    "simple",
+    "storage",
+    "monitor",
     "disk",
     "space",
-    "monitor"
+    "TB",
+    "GB",
+    "MB"
   ],
-  "author": "",
+  "author": "JP Belanger",
   "license": "MIT"
 }
 

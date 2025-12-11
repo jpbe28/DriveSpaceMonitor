@@ -50,7 +50,7 @@ Install it directly from the Cinnamon applet menu:
 
 3. Add the applet to your panel:
    - Right-click on the panel
-   - Select "Add applets to the panel"
+   - Select "Applets"
    - Find "Simple Storage Monitor" and click "Add"
 
 **Note:** For Methods 2 and 3, you'll need to download the applet files manually (from GitHub releases or by cloning the repository).
@@ -83,26 +83,14 @@ The applet includes a built-in settings UI. To configure it:
 - **Right Click**: Right-clicking opens the context menu with configuration options
 - **Low Space Warning**: When enabled, the applet text will change color when available space drops below the threshold
 
-## Development
-
-This applet is written in JavaScript using the Cinnamon applet API. The main files are:
-
-- `metadata.json`: Applet metadata and configuration
-- `applet.js`: Main applet logic
-- `stylesheet.css`: Styling for the applet
-- `settings-schema.json`: Settings UI definition
-- `install.sh`: Installation script
-
 ## Requirements
 
-- Any Linux distribution with Cinnamon desktop environment installed
-  - Linux Mint (most common)
-  - Fedora with Cinnamon
-  - Arch Linux with Cinnamon
-  - Debian/Ubuntu with Cinnamon
-  - openSUSE with Cinnamon
-  - Any other distribution with Cinnamon
-- Cinnamon version 3.0 or higher (tested up to 6.0)
+Linux with Cinnamon desktop environment
+
+Cinnamon 3.8 or later
+
+Only tested with Linux Mint
+
 
 ## License
 

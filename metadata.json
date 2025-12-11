@@ -3,7 +3,7 @@
     "name": "Simple Storage Monitor",
     "description": "A simple applet that displays the available space on a disk drive.",
     "icon": "icon.png",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "author": "JP",
     "max-instances": -1,
     "cinnamon-version": ["3.0", "3.2", "3.4", "3.6", "3.8", "4.0", "4.2", "4.4", "4.6", "4.8", "5.0", "5.2", "5.4", "5.6", "5.8", "6.0"]
