@@ -14,11 +14,9 @@ function DriveSpaceApplet(metadata, orientation, panel_height, instance_id) {
 DriveSpaceApplet.prototype = {
     __proto__: Applet.TextApplet.prototype,
 
-    _init: function(metadata, orientation, panel_height, instance_id) {
+    _init: function (metadata, orientation, panel_height, instance_id) {
         Applet.TextApplet.prototype._init.call(this, orientation, panel_height, instance_id);
 
-        this.metadata = metadata;
-        this.instance_id = instance_id;
         this._updateLoop = 0;
 
         // Default settings
@@ -33,9 +31,8 @@ DriveSpaceApplet.prototype = {
         this.lowSpaceColor = "#ff0000ff";
         this.openFileManagerOnClick = true;
 
-        // Load settings
+        // Settings menu
         this.settings = new Settings.AppletSettings(this, metadata.uuid, instance_id);
-
         this.settings.bind("drive-path", "drivePath", () => this._onSettingsChanged());
         this.settings.bind("update-interval", "updateInterval", () => this._onSettingsChanged());
         this.settings.bind("show-percentage", "showPercentage", () => this._onSettingsChanged());
@@ -45,7 +42,6 @@ DriveSpaceApplet.prototype = {
         this.settings.bind("low-space-warning-enabled", "lowSpaceWarningEnabled", () => this._onSettingsChanged());
         this.settings.bind("low-space-threshold", "lowSpaceThreshold", () => this._onSettingsChanged());
         this.settings.bind("low-space-color", "lowSpaceColor", () => this._onSettingsChanged());
-        this.settings.bind("open-file-manager-on-click", "openFileManagerOnClick", () => {});
 
         this.set_applet_tooltip("Simple Storage Monitor");
         this.set_applet_label("Loading...");
@@ -55,10 +51,11 @@ DriveSpaceApplet.prototype = {
         this.menu = new Applet.AppletPopupMenu(this, orientation);
         this.menuManager.addMenu(this.menu);
         this._createContextMenu();
+
         this._startUpdateLoop();
     },
 
-    _onSettingsChanged: function() {
+    _onSettingsChanged: function () {
         if (this.drivePath && this.drivePath.startsWith("file://")) {
             this.drivePath = GLib.filename_from_uri(this.drivePath, null)[0];
         }
@@ -66,23 +63,23 @@ DriveSpaceApplet.prototype = {
         this._startUpdateLoop();
     },
 
-    _stopUpdateLoop: function() {
+    _startUpdateLoop: function () {
+        this._stopUpdateLoop();
+        this._update();
+        this._updateLoop = Mainloop.timeout_add_seconds(this.updateInterval, () => {
+            this._update();
+            return true;
+        });
+    },
+
+    _stopUpdateLoop: function () {
         if (this._updateLoop > 0) {
             Mainloop.source_remove(this._updateLoop);
             this._updateLoop = 0;
         }
     },
 
-    _startUpdateLoop: function() {
-        this._stopUpdateLoop();
-        this._update();
-        this._updateLoop = Mainloop.timeout_add_seconds(this.updateInterval, () => {
-            this._update();
-            return true; // repeat
-        });
-    },
-
-    _createContextMenu: function() {
+    _createContextMenu: function () {
         let configureItem = new PopupMenu.PopupMenuItem("Configure...");
         configureItem.connect('activate', () => this.settings.openSettings());
         this.menu.addMenuItem(configureItem);
@@ -92,24 +89,24 @@ DriveSpaceApplet.prototype = {
         this.menu.addMenuItem(selectFolderItem);
     },
 
-    _getDriveSpace: function() {
+    _getDriveSpace: function () {
         try {
             let path = this.drivePath || "/";
             if (path.startsWith("file://")) {
                 path = GLib.filename_from_uri(path, null)[0];
             }
 
-            let [ok, out, err, exit] = GLib.spawn_command_line_sync(
+            const [ok, out, err, exit] = GLib.spawn_command_line_sync(
                 "df -h " + GLib.shell_quote(path)
             );
 
             if (!ok || exit !== 0) return { available: "Error", used: "", total: "", percent: 0 };
 
-            let output = imports.byteArray.toString(out);
-            let lines = output.split("\n");
+            const output = imports.byteArray.toString(out);
+            const lines = output.split("\n");
             if (lines.length < 2) return { available: "N/A", used: "", total: "", percent: 0 };
 
-            let parts = lines[1].trim().split(/\s+/);
+            const parts = lines[1].trim().split(/\s+/);
             if (parts.length < 5) return { available: "N/A", used: "", total: "", percent: 0 };
 
             return {
@@ -123,22 +120,22 @@ DriveSpaceApplet.prototype = {
         }
     },
 
-    _getDriveName: function() {
+    _getDriveName: function () {
         let path = this.drivePath || "/";
         if (path.startsWith("file://")) path = GLib.filename_from_uri(path, null)[0];
 
         path = path.replace(/\/$/, "");
         if (path === "/") return "Root";
 
-        let parts = path.split("/");
+        const parts = path.split("/");
         return parts.pop() || parts.pop() || "Root";
     },
 
-    _update: function() {
-        
-        let space = this._getDriveSpace();
+    _update: function () {
 
-        let name = this.customLabel.trim() !== "" ?
+        const space = this._getDriveSpace();
+
+        const name = this.customLabel.trim() !== "" ?
             this.customLabel.trim() :
             (this.showDriveName ? this._getDriveName() : "");
 
@@ -168,7 +165,7 @@ DriveSpaceApplet.prototype = {
         );
     },
 
-    on_applet_clicked: function() {
+    on_applet_clicked: function () {
         if (this.openFileManagerOnClick) {
             let path = this.drivePath;
             if (path.startsWith("file://")) path = GLib.filename_from_uri(path, null)[0];
@@ -176,17 +173,17 @@ DriveSpaceApplet.prototype = {
         }
     },
 
-    on_applet_middle_clicked: function() {
+    on_applet_middle_clicked: function () {
         let path = this.drivePath;
         if (path.startsWith("file://")) path = GLib.filename_from_uri(path, null)[0];
         Util.spawnCommandLine("xdg-open " + GLib.shell_quote(path));
     },
 
-    on_applet_context_menu: function() {
+    on_applet_context_menu: function () {
         if (this.menu) this.menu.toggle();
     },
 
-    on_applet_removed_from_panel: function() {
+    on_applet_removed_from_panel: function () {
         this._stopUpdateLoop();
         if (this.settings) this.settings.finalize();
     }

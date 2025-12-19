@@ -8,12 +8,12 @@ A Cinnamon panel applet that displays the available space on a selected folder o
 
 - Shows available disk space on a panel
 - Displays usage percentage
-- Click to open the folder/drive in file manager (configurable)
+- Click to open the folder/drive in file manager
 - Detailed tooltip showing total, used, and available space
 - Custom label support to override drive name
 - Low space warning with customizable threshold and color
-- Multiple instances supported (monitor different drives simultaneously)
-- Configurable display options (drive name, "free" text, percentage type)
+- Multiple instances supported
+- Configurable display options
 
 ## Installation
 
@@ -23,7 +23,7 @@ Install it directly from the Cinnamon applet menu:
 
 1. Right-click on your Cinnamon panel
 2. Select "Add applets to the panel"
-3. Click on "Download" tab (or "Get more online")
+3. Click on "Download" tab
 4. Search for "Simple Storage Monitor"
 5. Click "Install" next to the applet
 6. The applet will be automatically installed and ready to use
@@ -63,25 +63,6 @@ The applet includes a built-in settings UI. To configure it:
 2. Select "Configure..." or "Settings"
 3. Adjust the settings as needed
 
-### Configuration Options
-
-- **Mount point or folder to monitor**: Select the mounted drive or folder you want to monitor (e.g., `/mnt/Media4`, `/home`, `/`)
-- **Update interval**: How often to update the disk space information (default: 60 seconds, range: 5-3600)
-- **Show percentage**: Display the percentage next to the available space (default: enabled, shows used %)
-- **Show drive name**: Display the drive name before the free space (default: enabled)
-- **Custom label**: Set a custom label that overrides the drive name. Leave empty to use drive name if enabled above
-- **Show 'free' text**: Display the word "free" after the available space (default: enabled)
-- **Enable low space warning**: Change text color when available space is below threshold (default: enabled)
-- **Low space threshold**: Warning color will be applied when available space is below this percentage (default: 10%, range: 1-50%)
-- **Low space warning color**: Color to display when available space is below threshold (default: red #ff0000)
-- **Open file manager on click**: When enabled, clicking the applet opens the file manager to the monitored folder. When disabled, clicking opens settings (default: enabled)
-
-## Usage Tips
-
-- **Multiple Instances**: You can add multiple instances of this applet to monitor different drives/folders simultaneously
-- **Middle Click**: Middle-clicking the applet always opens the file manager, regardless of the "Open file manager on click" setting
-- **Right Click**: Right-clicking opens the context menu with configuration options
-- **Low Space Warning**: When enabled, the applet text will change color when available space drops below the threshold
 
 ## Requirements
 
@@ -98,5 +79,5 @@ MIT License - See LICENSE file for details
 
 ## Author
 
-JP (jpbe28)
+JP Belanger(jpbe28)
 
