@@ -1,8 +1,8 @@
-# Simple Storage Monitor Applet
+# Simple Disk Monitor Applet
 
 A Cinnamon panel applet that displays the available space on a selected folder or mounted drive.
 
-![Simple Storage Monitor Applet](screenshot.png)
+![Simple Disk Monitor Applet](screenshot.png)
 
 ## Features
 
@@ -24,7 +24,7 @@ Install it directly from the Cinnamon applet menu:
 1. Right-click on your Cinnamon panel
 2. Select "Add applets to the panel"
 3. Click on "Download" tab
-4. Search for "Simple Storage Monitor"
+4. Search for "Simple Disk Monitor"
 5. Click "Install" next to the applet
 6. The applet will be automatically installed and ready to use
 
@@ -32,7 +32,7 @@ Install it directly from the Cinnamon applet menu:
 
 1. Run the installation script:
    ```bash
-   cd /path/to/SimpleStorageMonitor
+   cd /path/to/SimpleDiskMonitor
    chmod +x install.sh
    ./install.sh
    ```
@@ -41,7 +41,7 @@ Install it directly from the Cinnamon applet menu:
 
 1. Copy the applet directory to your Cinnamon applets folder:
    ```bash
-   cp -r /path/to/SimpleStorageMonitor ~/.local/share/cinnamon/applets/simple-storage-monitor@jpbe28
+   cp -r /path/to/SimpleDiskMonitor ~/.local/share/cinnamon/applets/simple-disk-monitor@jpbe28
    ```
 
 2. Reload Cinnamon:
@@ -51,7 +51,7 @@ Install it directly from the Cinnamon applet menu:
 3. Add the applet to your panel:
    - Right-click on the panel
    - Select "Applets"
-   - Find "Simple Storage Monitor" and click "Add"
+   - Find ""Simple Disk Monitor"" and click "Add"
 
 **Note:** For Methods 2 and 3, you'll need to download the applet files manually (from GitHub releases or by cloning the repository).
 

@@ -1,10 +1,10 @@
 {
-  "name": "simple-storage-monitor",
+  "name": "simple-disk-monitor",
   "version": "1.1.0",
-  "description": "Cinnamon panel applet to display available space on a mounted drive",
+  "description": "Cinnamon panel applet to display available space on a disk",
   "main": "applet.js",
   "scripts": {
-    "install": "echo 'To install, copy this directory to ~/.local/share/cinnamon/applets/simple-storage-monitor@jpbe28'",
+    "install": "echo 'To install, copy this directory to ~/.local/share/cinnamon/applets/simple-disk-monitor@jpbe28'",
     "test": "echo 'No tests specified'"
   },
   "keywords": [

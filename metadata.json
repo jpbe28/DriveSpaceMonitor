@@ -1,6 +1,6 @@
 {
-    "uuid": "simple-storage-monitor@jpbe28",
-    "name": "Simple Storage Monitor",
+    "uuid": "simple-disk-monitor@jpbe28",
+    "name": "Simple Disk Monitor",
     "description": "A simple applet that displays the available space on a disk drive.",
     "icon": "icon.png",
     "version": "1.0.1",

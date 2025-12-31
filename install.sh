@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# Installation script for Simple Storage Monitor Applet
+# Installation script for Simple Disk Monitor Applet
 
-APPLET_NAME="simple-storage-monitor@jpbe28"
+APPLET_NAME="simple-disk-monitor@jpbe28"
 SOURCE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 TARGET_DIR="$HOME/.local/share/cinnamon/applets/$APPLET_NAME"
 
-echo "Installing Simple Storage Monitor Applet..."
+echo "Installing Simple Disk Monitor Applet..."
 echo "Source: $SOURCE_DIR"
 echo "Target: $TARGET_DIR"
 
@@ -25,7 +25,7 @@ echo ""
 echo "To use the applet:"
 echo "1. Reload Cinnamon (Alt+F2, type 'r', press Enter)"
 echo "2. Right-click on the panel and select 'Add applets to the panel'"
-echo "3. Find 'Simple Storage Monitor' and click 'Add'"
+echo "3. Find 'Simple Disk Monitor' and click 'Add'"
 echo ""
 echo "To configure the drive path:"
 echo "  Right-click on the applet and select 'Configure...'"

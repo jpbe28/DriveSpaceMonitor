@@ -43,7 +43,7 @@ DriveSpaceApplet.prototype = {
         this.settings.bind("low-space-threshold", "lowSpaceThreshold", () => this._onSettingsChanged());
         this.settings.bind("low-space-color", "lowSpaceColor", () => this._onSettingsChanged());
 
-        this.set_applet_tooltip("Simple Storage Monitor");
+        this.set_applet_tooltip("Simple Disk Monitor");
         this.set_applet_label("Loading...");
 
         // Context menu
