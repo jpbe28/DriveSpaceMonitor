@@ -3,9 +3,7 @@ const Settings = imports.ui.settings;
 const PopupMenu = imports.ui.popupMenu;
 const Mainloop = imports.mainloop;
 const GLib = imports.gi.GLib;
-const Gio = imports.gi.Gio;
 const Util = imports.misc.util;
-const St = imports.gi.St;
 
 function DriveSpaceApplet(metadata, orientation, panel_height, instance_id) {
     this._init(metadata, orientation, panel_height, instance_id);
